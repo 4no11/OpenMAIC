@@ -487,24 +487,19 @@ function HomePage() {
         )}
       >
         {/* ── Logo ── */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{
             delay: 0.1,
             type: 'spring',
             stiffness: 200,
             damping: 20,
           }}
-          className="flex items-center gap-3 mb-2"
+          className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#667eea] to-[#764ba2] mb-4"
         >
-          <div className="w-12 h-12 bg-gradient-to-br from-[#667eea] to-[#764ba2] rounded-xl flex items-center justify-center">
-            <i className="bi bi-robot text-white text-2xl"></i>
-          </div>
-          <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#667eea] to-[#764ba2]">
-            AI模拟课堂
-          </h1>
-        </motion.div>
+          AI模拟课堂
+        </motion.h1>
 
         {/* ── Slogan ── */}
         <motion.p
