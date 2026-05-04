@@ -206,62 +206,7 @@ export async function generateTTSForClassroom(
   classroomId: string,
   baseUrl: string,
 ): Promise<void> {
-  const audioDir = path.join(CLASSROOMS_DIR, classroomId, 'audio');
-  await ensureDir(audioDir);
-
-  // Resolve TTS provider (exclude browser-native-tts)
-  const ttsProviderIds = Object.keys(getServerTTSProviders()).filter(
-    (id) => id !== 'browser-native-tts',
-  );
-  if (ttsProviderIds.length === 0) {
-    log.warn('No server TTS provider configured, skipping TTS generation');
-    return;
-  }
-
-  const providerId = ttsProviderIds[0] as TTSProviderId;
-  const apiKey = resolveTTSApiKey(providerId);
-  if (!apiKey) {
-    log.warn(`No API key for TTS provider "${providerId}", skipping TTS generation`);
-    return;
-  }
-  const ttsBaseUrl = resolveTTSBaseUrl(providerId) || TTS_PROVIDERS[providerId]?.defaultBaseUrl;
-  const voice = DEFAULT_TTS_VOICES[providerId] || 'default';
-  const format = TTS_PROVIDERS[providerId]?.supportedFormats?.[0] || 'mp3';
-
-  for (const scene of scenes) {
-    if (!scene.actions) continue;
-
-    // Split long speech actions into multiple shorter ones before TTS generation,
-    // mirroring the client-side approach. Each sub-action gets its own audio file.
-    scene.actions = splitLongSpeechActions(scene.actions, providerId);
-
-    for (const action of scene.actions) {
-      if (action.type !== 'speech' || !(action as SpeechAction).text) continue;
-      const speechAction = action as SpeechAction;
-      const audioId = `tts_${action.id}`;
-
-      try {
-        const result = await generateTTS(
-          {
-            providerId,
-            modelId: DEFAULT_TTS_MODELS[providerId] || '',
-            apiKey,
-            baseUrl: ttsBaseUrl,
-            voice,
-            speed: speechAction.speed,
-          },
-          speechAction.text,
-        );
-
-        const filename = `${audioId}.${format}`;
-        await fs.writeFile(path.join(audioDir, filename), result.audio);
-
-        speechAction.audioId = audioId;
-        speechAction.audioUrl = mediaServingUrl(baseUrl, classroomId, `audio/${filename}`);
-        log.info(`Generated TTS: ${filename} (${result.audio.length} bytes)`);
-      } catch (err) {
-        log.warn(`TTS generation failed for action ${action.id}:`, err);
-      }
-    }
-  }
+  // 强制使用浏览器原生TTS，跳过服务端预生成
+  log.info('Browser-native TTS is enforced, skipping server-side TTS pre-generation');
+  return;
 }
