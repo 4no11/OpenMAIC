@@ -1,0 +1,13 @@
+# OpenMAIC Server Providers Configuration
+# 此文件可安全提交到 Git，API Key 仅在服务器上生效
+
+providers:
+  siliconflow:
+    apiKey: sk-meqhrwnstykacbxnjcwwpsxcwfzkvzzldnwbookzphpjhvlx
+    baseUrl: https://api.siliconflow.cn/v1
+    models:
+      - deepseek-ai/DeepSeek-V3
+      - deepseek-ai/DeepSeek-V3.2
+      - deepseek-ai/DeepSeek-R1
+      - Qwen/Qwen2.5-72B-Instruct
+      - Qwen/Qwen2.5-7B-Instruct
