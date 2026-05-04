@@ -1055,24 +1055,8 @@ export const useSettingsStore = create<SettingsState>()(
                   autoPdfProvider = 'mineru' as PDFProviderId;
                 }
 
-                // TTS: select first server provider if current is not server-configured
-                const serverTtsIds = Object.keys(data.tts) as TTSProviderId[];
-                if (
-                  serverTtsIds.length > 0 &&
-                  !newTTSConfig[state.ttsProviderId]?.isServerConfigured
-                ) {
-                  autoTtsProvider = serverTtsIds[0];
-                  autoTtsVoice = DEFAULT_TTS_VOICES[autoTtsProvider] || 'default';
-                }
-
-                // ASR: select first server provider if current is not server-configured
-                const serverAsrIds = Object.keys(data.asr) as ASRProviderId[];
-                if (
-                  serverAsrIds.length > 0 &&
-                  !newASRConfig[state.asrProviderId]?.isServerConfigured
-                ) {
-                  autoAsrProvider = serverAsrIds[0];
-                }
+                // TTS: 强制使用浏览器原生TTS，不自动切换到服务端配置
+                // ASR: 强制使用浏览器原生ASR，不自动切换到服务端配置
 
                 // Image: first server provider
                 const serverImageIds = Object.keys(data.image) as ImageProviderId[];
