@@ -961,18 +961,8 @@ export const useSettingsStore = create<SettingsState>()(
                 newProvidersConfig,
                 llmFallback,
               );
-              const validTTSProvider = validateProvider(
-                state.ttsProviderId,
-                newTTSConfig,
-                ttsFallback,
-                'browser-native-tts' as TTSProviderId,
-              );
-              const validASRProvider = validateProvider(
-                state.asrProviderId,
-                newASRConfig,
-                asrFallback,
-                'browser-native' as ASRProviderId,
-              );
+              const validTTSProvider = 'browser-native-tts' as TTSProviderId; // 强制使用浏览器原生TTS
+              const validASRProvider = 'browser-native' as ASRProviderId; // 强制使用浏览器原生ASR
               const validPDFProvider = validateProvider(
                 state.pdfProviderId,
                 newPDFConfig,
