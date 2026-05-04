@@ -538,8 +538,8 @@ export const useSettingsStore = create<SettingsState>()(
 
       return {
         // Initial state (use migrated data if available)
-        providerId: migratedData?.providerId || 'openai',
-        modelId: migratedData?.modelId || '',
+        providerId: migratedData?.providerId || 'siliconflow',
+        modelId: migratedData?.modelId || 'deepseek-ai/DeepSeek-V3',
         providersConfig: migratedData?.providersConfig || getDefaultProvidersConfig(),
         ttsModel: migratedData?.ttsModel || 'openai-tts',
         selectedAgentIds: migratedData?.selectedAgentIds || ['default-1', 'default-2', 'default-3'],
@@ -956,11 +956,14 @@ export const useSettingsStore = create<SettingsState>()(
               const imageFallback = buildFallback<ImageProviderId>(newImageConfig);
               const videoFallback = buildFallback<VideoProviderId>(newVideoConfig);
 
-              const validLLMProvider = validateProvider(
-                state.providerId,
-                newProvidersConfig,
-                llmFallback,
-              );
+              // LLM: 优先使用硅基流动，如果不可用则使用validateProvider
+              const validLLMProvider = newProvidersConfig['siliconflow']?.isServerConfigured || newProvidersConfig['siliconflow']?.apiKey
+                ? 'siliconflow' as ProviderId
+                : validateProvider(
+                    state.providerId,
+                    newProvidersConfig,
+                    llmFallback,
+                  );
               const validTTSProvider = 'browser-native-tts' as TTSProviderId; // 强制使用浏览器原生TTS
               const validASRProvider = 'browser-native' as ASRProviderId; // 强制使用浏览器原生ASR
               const validPDFProvider = validateProvider(
